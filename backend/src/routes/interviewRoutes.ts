@@ -2,12 +2,12 @@ import { Router } from "express";
 
 import Groq from "groq-sdk";
 
-import prisma from "../lib/prisma.js";
+import prisma from "../lib/prisma";
 
 import {
   authMiddleware,
   AuthRequest,
-} from "../middleware/authMiddleware.js";
+} from "../middleware/authMiddleware";
 
 const router = Router();
 
