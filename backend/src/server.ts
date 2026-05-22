@@ -51,8 +51,8 @@ app.use(
   cors({
     origin: [
       "http://localhost:5173",
-
       "https://ai-interview-assistant.vercel.app",
+      "https://ai-interview-assistant.up.railway.app"  // 
     ],
 
     credentials: true,
