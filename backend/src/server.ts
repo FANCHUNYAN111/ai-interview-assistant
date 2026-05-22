@@ -60,7 +60,10 @@ const corsOptions: cors.CorsOptions = {
 
 // 使用 CORS 中间件（它会自动处理 OPTIONS 预检请求）
 app.use(cors(corsOptions));
-
+app.use((req, res, next) => {
+  console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
+  next();
+});
 // ==================== 其他中间件 ====================
 app.use(express.json());
 
