@@ -41,8 +41,8 @@ const allowedOrigins = [
   "http://localhost:5173",
   "https://ai-interview-assistant.vercel.app",
   "https://ai-interview-assistant.up.railway.app",
+  "https://ai-interview-assistant-git-main-1348029974-7260s-projects.vercel.app"  // 添加这一行
 ];
-
 const corsOptions: cors.CorsOptions = {
   origin: (origin, callback) => {
     if (!origin) return callback(null, true);
