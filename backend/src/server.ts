@@ -18,6 +18,17 @@ app.use(
   "/api/conversations",
   conversationRoutes
 );
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+
+      "https://你的vercel域名.vercel.app",
+    ],
+
+    credentials: true,
+  })
+);
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
