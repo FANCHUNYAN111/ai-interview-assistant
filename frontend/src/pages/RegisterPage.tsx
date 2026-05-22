@@ -14,7 +14,7 @@ function RegisterPage() {
 
   const register = async () => {
     try {
-      await api.post("/auth/register", {
+      await api.post("/api/auth/register", {
         email,
         password,
       });
