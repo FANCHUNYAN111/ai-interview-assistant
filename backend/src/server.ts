@@ -10,7 +10,17 @@ import interviewRoutes from "./routes/interviewRoutes";
 import conversationRoutes from "./routes/conversationRoutes";
 
 dotenv.config();
+console.log("JWT:", process.env.JWT_SECRET);
 
+console.log(
+  "GROQ:",
+  process.env.GROQ_API_KEY
+);
+
+console.log(
+  "DATABASE:",
+  process.env.DATABASE_URL
+);
 const app = express();
 
 /**
