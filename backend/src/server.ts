@@ -23,7 +23,7 @@ app.use(
     origin: [
       "http://localhost:5173",
 
-      "https://你的vercel域名.vercel.app",
+      "https://ai-interview-assistant.up.railway.app/",
     ],
 
     credentials: true,

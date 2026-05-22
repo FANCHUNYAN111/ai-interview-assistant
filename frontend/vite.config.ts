@@ -8,7 +8,7 @@ export default defineConfig({
     cors: true,
     // host:'0.0.0.0',
     // 跨域代理配置
-
+// https://ai-interview-assistant.up.railway.app/
     proxy: {
       "/base_api": {
         target: "http://localhost:5000",
