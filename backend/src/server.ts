@@ -60,14 +60,20 @@ app.use(
  * 测试接口
  */
 
-app.get("/", (req, res) => {
+app.get("/", (_req, res) => {
   res.send("Backend Running");
 });
-
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
   console.log(
     `Server running on port ${PORT}`
   );
+});
+process.on('uncaughtException', (err) => {
+  console.error('Uncaught Exception:', err);
+  process.exit(1); // 让 Railway 记录错误后重启
+});
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('Unhandled Rejection at:', promise, 'reason:', reason);
 });
