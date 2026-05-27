@@ -7,7 +7,7 @@ import {
 import { useNavigate } from "react-router-dom";
 
 import { FiMenu } from "react-icons/fi";
-
+import { toast } from "sonner";
 import Sidebar from "../components/Sidebar";
 
 import ChatInput from "../components/ChatInput";
@@ -58,7 +58,7 @@ function ChatPage() {
   ) => {
     try {
       const response = await api.get(
-        `/conversations/${conversationId}/messages`
+        `/api/conversations/${conversationId}/messages`
       );
 
       setMessages(response.data);
@@ -69,7 +69,7 @@ function ChatPage() {
   const fetchConversations = async () => {
     try {
       const response =
-        await api.get("/conversations");
+        await api.get("/api/conversations");
 
       const data = response.data;
 
@@ -83,9 +83,6 @@ function ChatPage() {
         const firstId = data[0].id;
 
         setCurrentConversationId(firstId);
-
-        // 直接加载消息
-        fetchMessages(firstId);
       }
     } catch (error) {
       console.error(error);
@@ -138,7 +135,7 @@ function ChatPage() {
   const createConversation = async () => {
     try {
       const response =
-        await api.post("/conversations");
+        await api.post("/api/conversations");
 
       const newConversation =
         response.data;
@@ -167,9 +164,9 @@ function ChatPage() {
   ) => {
     try {
       await api.delete(
-        `/conversations/${id}`
+        `/api/conversations/${id}`
       );
-
+      toast.success("删除成功");
       const updated =
         conversations.filter(
           (item) => item.id !== id
@@ -191,6 +188,8 @@ function ChatPage() {
       }
     } catch (error) {
       console.error(error);
+
+      toast.error("AI 回复失败");
     }
   };
 
@@ -282,12 +281,13 @@ function ChatPage() {
     } catch (error) {
       console.error(error);
     } finally {
+      await fetchConversations();
       setLoading(false);
     }
   };
 
   return (
-    <div className="flex h-screen bg-[#343541] overflow-hidden">
+    <div className="flex h-screen bg-white overflow-hidden">
       {/* Sidebar */}
       <Sidebar
         conversations={conversations}
@@ -305,23 +305,38 @@ function ChatPage() {
         }
       />
 
-      {/* 右侧聊天区域 */}
-      <div className="flex-1 flex flex-col">
-        {/* 顶部导航 */}
-        <div className="h-14 border-b border-gray-700 flex items-center px-4">
+      {/* 右侧区域 */}
+      <div className="flex-1 flex flex-col bg-white">
+        {/* 顶部 */}
+        <div className="h-16 border-b border-gray-200 flex items-center px-4 md:px-6">
+          {/* 手机菜单 */}
           <button
             onClick={() =>
               setMobileOpen(true)
             }
-            className="md:hidden text-white text-2xl"
+            className="
+            md:hidden
+            text-black
+            text-2xl
+          "
           >
             <FiMenu />
           </button>
 
-          <h1 className="text-white font-bold ml-4">
+          {/* 标题 */}
+          <h1
+            className="
+            ml-4
+            text-sm
+            md:text-base
+            font-semibold
+            text-black
+          "
+          >
             AI Interview Assistant
           </h1>
 
+          {/* 退出 */}
           <button
             onClick={() => {
               localStorage.removeItem(
@@ -330,7 +345,13 @@ function ChatPage() {
 
               navigate("/login");
             }}
-            className="ml-auto text-sm text-red-400 hover:text-red-500"
+            className="
+            ml-auto
+            text-sm
+            text-gray-500
+            hover:text-black
+            transition
+          "
           >
             退出登录
           </button>
@@ -339,24 +360,178 @@ function ChatPage() {
         {/* 消息区域 */}
         <div className="flex-1 overflow-y-auto">
           {messages.length === 0 ? (
-            <div className="h-full flex items-center justify-center text-white text-3xl font-bold text-center px-4">
-              AI Interview Assistant
+            <div
+              className="
+              h-full
+              flex
+              items-center
+              justify-center
+              px-6
+            "
+            >
+              <div className="max-w-3xl text-center">
+                <h1
+                  className="
+                  text-4xl
+                  md:text-6xl
+                  font-semibold
+                  tracking-tight
+                  leading-tight
+                  text-black
+                  mb-6
+                "
+                >
+                  AI Interview Assistant
+                </h1>
+
+                <p
+                  className="
+                  text-gray-500
+                  text-base
+                  md:text-lg
+                  leading-8
+                "
+                >
+                  输入岗位名称，AI 将自动生成面试题、
+                  点评答案并给出优化建议
+                </p>
+
+                {/* 推荐卡片 */}
+                <div
+                  className="
+                  grid
+                  grid-cols-1
+                  md:grid-cols-3
+                  gap-4
+                  mt-12
+                "
+                >
+                  <button
+                    onClick={() =>
+                      sendMessage(
+                        "React 前端开发岗位"
+                      )
+                    }
+                    className="
+                    border
+                    border-gray-200
+                    rounded-3xl
+                    p-5
+                    text-left
+                    hover:bg-black
+                    hover:text-white
+                    transition
+                  "
+                  >
+                    <p className="font-medium mb-2">
+                      Frontend Interview
+                    </p>
+
+                    <p
+                      className="
+                      text-sm
+                      opacity-70
+                    "
+                    >
+                      React / TypeScript
+                    </p>
+                  </button>
+
+                  <button
+                    onClick={() =>
+                      sendMessage(
+                        "Node.js 后端开发岗位"
+                      )
+                    }
+                    className="
+                    border
+                    border-gray-200
+                    rounded-3xl
+                    p-5
+                    text-left
+                    hover:bg-black
+                    hover:text-white
+                    transition
+                  "
+                  >
+                    <p className="font-medium mb-2">
+                      Backend Interview
+                    </p>
+
+                    <p
+                      className="
+                      text-sm
+                      opacity-70
+                    "
+                    >
+                      Node.js / Express
+                    </p>
+                  </button>
+
+                  <button
+                    onClick={() =>
+                      sendMessage(
+                        "AI 算法工程师岗位"
+                      )
+                    }
+                    className="
+                    border
+                    border-gray-200
+                    rounded-3xl
+                    p-5
+                    text-left
+                    hover:bg-black
+                    hover:text-white
+                    transition
+                  "
+                  >
+                    <p className="font-medium mb-2">
+                      AI Interview
+                    </p>
+
+                    <p
+                      className="
+                      text-sm
+                      opacity-70
+                    "
+                    >
+                      LLM / Prompt
+                    </p>
+                  </button>
+                </div>
+              </div>
             </div>
           ) : (
-            messages.map(
-              (message, index) => (
-                <MessageBubble
-                  key={index}
-                  role={message.role}
-                  content={message.content}
-                />
-              )
-            )
+            <div className="py-8">
+              {messages.map(
+                (message, index) => (
+                  <MessageBubble
+                    key={index}
+                    role={message.role}
+                    content={message.content}
+                    streaming={
+                      loading &&
+                      index ===
+                      messages.length - 1 &&
+                      message.role ===
+                      "assistant"
+                    }
+                  />
+                )
+              )}
+            </div>
           )}
 
           {/* Loading */}
           {loading && (
-            <div className="text-center text-gray-400 py-4">
+            <div
+              className="
+              text-center
+              text-gray-400
+              text-sm
+              py-4
+            "
+            >
               AI 思考中...
             </div>
           )}

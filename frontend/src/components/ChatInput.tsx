@@ -1,4 +1,9 @@
-import { useState } from "react";
+import {
+  useRef,
+  useState,
+} from "react";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
 
 interface Props {
   onSend: (message: string) => void;
@@ -10,43 +15,85 @@ function ChatInput({
   onSend,
   loading,
 }: Props) {
-  // 输入内容
-  const [message, setMessage] =
+  const textareaRef =
+    useRef<HTMLTextAreaElement>(null);
+
+  const [input, setInput] =
     useState("");
 
-  // 点击发送
   const handleSend = () => {
-    // 空内容不发送
-    if (!message.trim()) return;
+    if (!input.trim()) return;
 
-    // 调用父组件函数
-    onSend(message);
+    onSend(input);
 
-    // 清空输入框
-    setMessage("");
+    setInput("");
+
+    textareaRef.current?.focus();
   };
 
   return (
-    <div className="border-t border-gray-700 p-4 bg-[#343541]">
-      <div className="max-w-3xl mx-auto flex gap-4">
+    <div className="border-t border-gray-200 bg-white p-4 md:p-6">
+      <div className="max-w-4xl mx-auto">
         {/* 输入框 */}
-        <input
-          value={message}
-          onChange={(e) =>
-            setMessage(e.target.value)
-          }
-          placeholder="请输入岗位..."
-          className="flex-1 p-4 rounded-xl bg-[#40414f] text-white outline-none"
-        />
-
-        {/* 发送按钮 */}
-        <button
-          onClick={handleSend}
-          disabled={loading}
-          className="bg-green-500 hover:bg-green-600 transition px-6 rounded-xl text-white"
+        <div
+          className="
+          border border-gray-300
+          rounded-3xl
+          px-4 py-4
+          flex items-end gap-4
+          bg-white
+          shadow-sm
+          hover:shadow-md
+          transition
+        "
         >
-          {loading ? "..." : "发送"}
-        </button>
+          <Textarea
+            ref={textareaRef}
+            rows={1}
+            value={input}
+            onChange={(e) =>
+              setInput(e.target.value)
+            }
+            onKeyDown={(e) => {
+              if (
+                e.key === "Enter" &&
+                !e.shiftKey
+              ) {
+                e.preventDefault();
+
+                if (!loading) {
+                  handleSend();
+                }
+              }
+            }}
+            placeholder="输入岗位，例如：React 前端开发岗位"
+
+          />
+
+          {/* 发送按钮 */}
+          <Button
+            onClick={handleSend}
+            disabled={loading}
+
+          >
+            →
+          </Button>
+        </div>
+
+        {/* 底部提示 */}
+        <p
+          className="
+          text-center
+          text-xs
+          text-gray-400
+          mt-3
+          leading-6
+        "
+        >
+          AI may produce inaccurate
+          information. Verify important
+          details before use.
+        </p>
       </div>
     </div>
   );

@@ -1,3 +1,12 @@
+import { FiPlus } from "react-icons/fi";
+
+import { Trash2 } from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+
 interface Props {
   conversations: any[];
 
@@ -28,71 +37,133 @@ function Sidebar({
       {/* 手机遮罩 */}
       {mobileOpen && (
         <div
-          className="fixed inset-0 bg-black/50 z-40 md:hidden"
+          className="
+          fixed inset-0
+          bg-black/20
+          z-40
+          md:hidden
+        "
           onClick={onClose}
         />
       )}
 
+      {/* Sidebar */}
       <div
         className={`
-          fixed md:relative z-50
-          h-full w-64 bg-[#202123]
-          transform transition-transform duration-300
-          flex flex-col
+        fixed md:relative z-50
+        h-full w-72
+        bg-[#fafafa]
+        border-r border-gray-200
+        transform transition-transform duration-300
+        flex flex-col
 
-          ${
-            mobileOpen
-              ? "translate-x-0"
-              : "-translate-x-full"
+        ${mobileOpen
+            ? "translate-x-0"
+            : "-translate-x-full"
           }
 
-          md:translate-x-0
-        `}
+        md:translate-x-0
+      `}
       >
-        {/* 新聊天 */}
+        {/* Logo */}
+        <div
+          className="
+          h-16
+          flex items-center
+          px-5
+          border-b border-gray-200
+          text-lg
+          font-semibold
+          text-black
+        "
+        >
+          AI Interview
+        </div>
+
+        {/* New Chat */}
         <div className="p-4">
           <button
             onClick={onNewChat}
-            className="w-full border border-gray-600 rounded-xl p-3 text-white hover:bg-gray-700"
+            className="
+            w-full
+            h-12
+            rounded-2xl
+            border border-gray-300
+            hover:bg-black
+            hover:text-white
+            transition-all duration-200
+            text-sm
+            font-medium
+            flex items-center
+            justify-center
+            gap-2
+          "
           >
-            + 新聊天
+            <FiPlus />
+            New Chat
           </button>
         </div>
 
         {/* 会话列表 */}
-        <div className="flex-1 overflow-y-auto">
+        <div
+          className="
+          flex-1
+          overflow-y-auto
+          px-3
+          pb-4
+          space-y-2
+        "
+        >
           {conversations.map((item) => (
             <div
               key={item.id}
-              className={`
-                flex items-center justify-between
-                p-4 text-white cursor-pointer
-                hover:bg-[#2A2B32]
-
-                ${
-                  currentId === item.id
-                    ? "bg-[#343541]"
-                    : ""
-                }
-              `}
               onClick={() =>
                 onSelect(item.id)
               }
+              className={`
+      group
+      w-full
+      text-left
+      rounded-2xl
+      px-4
+      py-3
+      text-sm
+      transition
+      flex items-center justify-between
+      cursor-pointer
+
+      ${currentId === item.id
+                  ? "bg-black text-white"
+                  : "hover:bg-gray-100 text-black"
+                }
+    `}
             >
               <span className="truncate">
                 {item.title}
               </span>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
 
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
+                      onDelete(item.id);
+                    }}
+                    className={`
+        ${currentId === item.id
+                        ? "text-white"
+                        : "text-gray-400"
+                      }
+      `}
+                  >
+                    <Trash2 size={16} />
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  删除聊天
+                </TooltipContent>
+              </Tooltip>
 
-                  onDelete(item.id);
-                }}
-                className="text-xs text-red-400 hover:text-red-500"
-              >
-                删除
-              </button>
             </div>
           ))}
         </div>

@@ -33,7 +33,30 @@ router.post(
           conversationId,
         },
       });
+      const conversation =
+        await prisma.conversation.findUnique({
+          where: {
+            id: conversationId,
+          },
+        });
 
+      if (
+        conversation &&
+        conversation.title === "新的聊天"
+      ) {
+        await prisma.conversation.update({
+          where: {
+            id: conversationId,
+          },
+
+          data: {
+            title:
+              job.length > 20
+                ? job.slice(0, 20) + "..."
+                : job,
+          },
+        });
+      }
       // 2. 调用 AI
       const completion =
         await groq.chat.completions.create({

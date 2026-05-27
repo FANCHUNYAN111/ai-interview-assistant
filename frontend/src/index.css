@@ -2,9 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  margin: 0;
-  background: #0f172a;
-  color: white;
-  font-family: sans-serif;
+@layer base {
+  * {
+    @apply border-gray-200;
+  }
+
+  body {
+    @apply bg-white text-black;
+  }
 }

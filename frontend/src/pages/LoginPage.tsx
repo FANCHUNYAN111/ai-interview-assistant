@@ -1,7 +1,10 @@
 import { useState } from "react";
 
 import { useNavigate, Link } from "react-router-dom";
+import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 
+import { Input } from "@/components/ui/input";
 import api from "../services/api";
 
 function LoginPage() {
@@ -26,10 +29,11 @@ function LoginPage() {
         "token",
         response.data.token
       );
+      toast.success("登录成功");
 
       navigate("/chat");
     } catch (error: any) {
-      alert(
+      toast.error(
         error.response?.data?.message ||
         "登录失败"
       );
@@ -37,46 +41,132 @@ function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#343541] flex items-center justify-center p-6">
-      <div className="w-full max-w-md bg-[#444654] rounded-2xl p-8">
-        <h1 className="text-3xl text-white font-bold text-center mb-8">
-          登录
-        </h1>
-
-        <div className="flex flex-col gap-4">
-          <input
-            type="email"
-            placeholder="邮箱"
-            value={email}
-            onChange={(e) =>
-              setEmail(e.target.value)
-            }
-            className="p-4 rounded-xl bg-[#343541] text-white outline-none"
-          />
-
-          <input
-            type="password"
-            placeholder="密码"
-            value={password}
-            onChange={(e) =>
-              setPassword(e.target.value)
-            }
-            className="p-4 rounded-xl bg-[#343541] text-white outline-none"
-          />
-
-          <button
-            onClick={login}
-            className="bg-green-500 hover:bg-green-600 transition p-4 rounded-xl text-white font-bold"
+    <div className="min-h-screen bg-white flex">
+      {/* 左侧 */}
+      <div
+        className="
+        hidden
+        lg:flex
+        flex-1
+        border-r border-gray-200
+        items-center
+        justify-center
+        p-12
+      "
+      >
+        <div className="max-w-xl">
+          <p
+            className="
+            text-sm
+            uppercase
+            tracking-[0.2em]
+            text-gray-400
+            mb-6
+          "
           >
-            登录
-          </button>
+            AI Interview Assistant
+          </p>
 
-          <Link
-            to="/register"
-            className="text-center text-gray-300"
+          <h1
+            className="
+            text-6xl
+            font-semibold
+            tracking-tight
+            leading-tight
+            text-black
+            mb-8
+          "
           >
-            没有账号？去注册
-          </Link>
+            Practice interviews with AI.
+          </h1>
+
+          <p
+            className="
+            text-lg
+            leading-9
+            text-gray-500
+          "
+          >
+            生成面试题、模拟真实面试、
+            AI 点评回答并给出优化建议，
+            帮助你更高效准备技术面试。
+          </p>
+        </div>
+      </div>
+
+      {/* 右侧登录 */}
+      <div
+        className="
+        flex-1
+        flex
+        items-center
+        justify-center
+        p-6
+      "
+      >
+        <div className="w-full max-w-md">
+          {/* Logo */}
+          <div className="mb-10 text-center">
+            <h1
+              className="
+              text-4xl
+              font-semibold
+              tracking-tight
+              text-black
+              mb-3
+            "
+            >
+              Welcome back
+            </h1>
+
+            <p className="text-gray-500">
+              登录你的 AI 面试助手账号
+            </p>
+          </div>
+
+          {/* 表单 */}
+          <div className="space-y-4">
+            <Input
+              type="email"
+              placeholder="邮箱"
+              value={email}
+              onChange={(e) =>
+                setEmail(e.target.value)
+              }
+
+            />
+
+            <Input
+              type="password"
+              placeholder="密码"
+              value={password}
+              onChange={(e) =>
+                setPassword(e.target.value)
+              }
+
+            />
+
+            <Button
+              onClick={login}
+
+            >
+              登录
+            </Button>
+          </div>
+
+          {/* 底部 */}
+          <div className="mt-8 text-center">
+            <Link
+              to="/register"
+              className="
+              text-gray-500
+              hover:text-black
+              transition
+            "
+            >
+              没有账号？立即注册
+            </Link>
+          </div>
         </div>
       </div>
     </div>
