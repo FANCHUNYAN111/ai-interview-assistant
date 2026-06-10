@@ -42,6 +42,7 @@ const allowedOrigins = [
   "http://192.168.31.81:5173",
   "https://ai-interview-assistant.vercel.app",
   "https://ai-interview-assistant.up.railway.app",
+  'my-todo-app-hazel-delta.vercel.app',
   "https://ai-interview-assistant-git-main-1348029974-7260s-projects.vercel.app"  // 添加这一行
 ];
 const corsOptions: cors.CorsOptions = {

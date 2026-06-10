@@ -23,7 +23,7 @@ export default defineConfig({
     // https://ai-interview-assistant.up.railway.app/
     proxy: {
       '/api': {
-        target: 'http://localhost:5000',
+        target: 'https://my-todo-app-hazel-delta.vercel.app',
         changeOrigin: true,
       }
     }
